@@ -6,7 +6,7 @@ import AnalysisResult from '../components/AnalysisResult';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
-  const [analysis, setAnalysis] = useState(null);
+  const [analysis, setAnalysis] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleUpload = async (file: File) => {
@@ -39,58 +39,89 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8 px-4">
+    <main className="min-h-screen px-4 py-8 relative">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            🏗️ System Design Reviewer
-          </h1>
-          <p className="text-gray-600">
-            Upload your system architecture diagram for AI-powered analysis on scalability, 
-            reliability, and performance bottlenecks
-          </p>
+        {/* Header - Clean & Modern */}
+        <div className="text-center mb-16 animate-slide-up">
+          <div className="inline-block">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+              <span className="text-white">System</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                Design
+              </span>
+              <span className="text-white">.</span>
+              <span className="text-white font-light">Review</span>
+            </h1>
+            
+            <p className="text-gray-400 max-w-xl mx-auto text-sm font-light tracking-wider mt-3">
+              AI-Powered Architecture Intelligence
+            </p>
+            
+            <div className="flex items-center justify-center gap-6 mt-4 text-xs text-gray-600 font-mono">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                Online
+              </span>
+              <span className="w-px h-3 bg-white/10"></span>
+              <span>v2.0.0</span>
+              <span className="w-px h-3 bg-white/10"></span>
+              <span className="text-cyan-400/60">● Ready</span>
+            </div>
+          </div>
         </div>
 
+        {/* Upload Section */}
         <DiagramUploader onUpload={handleUpload} isLoading={isLoading} />
 
+        {/* Error */}
         {error && (
-          <div className="max-w-4xl mx-auto mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-            <strong className="font-bold">Error: </strong>
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
-
-        {analysis && <AnalysisResult analysis={analysis} />}
-
-        {!analysis && !isLoading && !error && (
-          <div className="max-w-4xl mx-auto mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">How it works:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">📤</span>
-                </div>
-                <h4 className="font-medium text-gray-800">1. Upload</h4>
-                <p className="text-sm text-gray-600">Upload your architecture diagram image</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">🤖</span>
-                </div>
-                <h4 className="font-medium text-gray-800">2. AI Analysis</h4>
-                <p className="text-sm text-gray-600">Vision API analyzes components and structure</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">📊</span>
-                </div>
-                <h4 className="font-medium text-gray-800">3. Review</h4>
-                <p className="text-sm text-gray-600">Get detailed feedback on your architecture</p>
+          <div className="max-w-4xl mx-auto mt-6 bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-xl backdrop-blur-sm animate-slide-up">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <strong className="font-bold">Error: </strong>
+                <span>{error}</span>
               </div>
             </div>
           </div>
         )}
+
+        {/* Analysis Result */}
+        {analysis && <AnalysisResult analysis={analysis} />}
+
+        {/* How it works */}
+        {!analysis && !isLoading && !error && (
+          <div className="max-w-4xl mx-auto mt-16 glass-card rounded-2xl p-8 animate-slide-up">
+            <h3 className="text-xl font-bold text-white text-center mb-8">
+              <span className="text-cyan-400">$</span> how-it-works.sh
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { icon: '📤', step: '01', title: 'Upload', desc: 'Upload your architecture diagram image', color: 'cyan' },
+                { icon: '🤖', step: '02', title: 'Analyze', desc: 'Vision API analyzes components and structure', color: 'purple' },
+                { icon: '📊', step: '03', title: 'Review', desc: 'Get detailed feedback on your architecture', color: 'pink' }
+              ].map((item) => (
+                <div key={item.step} className="text-center group">
+                  <div className="relative inline-block">
+                    <div className={`
+                      w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl
+                      bg-${item.color}-500/10 border border-${item.color}-500/20
+                      group-hover:scale-110 transition-transform duration-300
+                    `}>
+                      {item.icon}
+                    </div>
+                    <div className="absolute -top-2 -right-2 text-xs font-mono text-gray-500 bg-black/50 px-2 py-0.5 rounded-full border border-white/5">
+                      {item.step}
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-1">{item.title}</h4>
+                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
 }
